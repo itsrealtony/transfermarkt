@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Partite della Settimana - Top 5 Campionati</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
+        .container { width: 80%; margin: 30px auto; background: #fff; padding: 20px; border-radius: 8px; }
+        h1 { text-align: center; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; text-align: center; border: 1px solid #ddd; }
+        th { background-color: #0073e6; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+    </style>
+</head>
+<body>
+<div style="text-align: center; margin-top: 20px;">
+    <h2>Benvenuto{% if username %}, {{ username }}{% endif %}</h2>
+</div>
+    <div class="container">
+        <h1>Partite della Settimana - Top 5 Campionati</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Data</th>
+                    <th>Campionato</th>
+                    <th>Squadra Casa</th>
+                    <th>Squadra Ospite</th>
+                    <th>Stadio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in partite %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ p.data|date:"Y-m-d H:i" }}</td>
+                    <td>{{ p.campionato.nome }}</td>
+                    <td>{{ p.squadra_casa.nome }}</td>
+                    <td>{{ p.squadra_ospite.nome }}</td>
+                    <td>{{ p.stadio }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">Nessuna partita trovata.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Elenco Nazionalità</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { width: 400px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
+        h1 { color: #0073e6; text-align: center; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 8px 0; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Elenco Nazionalità</h1>
+        <ul>
+            {% for n in nazionalita %}
+                <li>{{ n.nome }}</li>
+            {% empty %}
+                <li>Nessuna nazionalità trovata.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

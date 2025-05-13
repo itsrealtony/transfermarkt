@@ -1,0 +1,119 @@
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from datetime import timedelta
+from .models import Partita, Utente , Squadra , Nazionalita
+from .form import RegistrazioneForm
+from .form import LoginForm
+
+import hashlib
+
+
+
+
+
+def benvenuto(request):
+    return render(request, 'benvenuto.html')
+
+
+
+
+def partite_settimana(request):
+    username = request.session.get('user_email', '')
+    oggi = timezone.now()
+    fine_settimana = oggi + timedelta(days=7)
+    top_campionati = [
+        "Serie a",
+        "Bundesliga",
+        "Premier League",
+        "Ligue 1",
+        "LaLiga"
+    ]
+    partite = Partita.objects.filter(
+        campionato__nome__in=top_campionati,
+        data__range=(oggi, fine_settimana)
+    ).order_by('data')[:10]
+    return render(request, 'principale.html', {'partite': partite, 'username': username})
+
+
+def authenticated(email, password):
+    return Utente.objects.filter(email=email, password=password).exists()
+
+def login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        hashed_password = hashlib.md5(password.encode()).hexdigest()
+        # print(email," : ", hashed_password)
+
+        if authenticated(email, hashed_password):
+            request.session['utente_email'] = email
+            return redirect('principale')
+        else:
+            return render(request, 'login.html', {'error_message': "Credenziali non valide, riprova"})
+    else:
+        return render(request, 'login.html')
+
+def registrazione(request):
+    nazionalita = Nazionalita.objects.all()
+    squadre = Squadra.objects.all()
+    return render(request, 'registrazione.html', {
+        'nazionalita': nazionalita,
+        'squadre': squadre
+    })
+def Lista_Nazionalita(request):
+    nazionalita = Nazionalita.objects.all()
+    print (nazionalita)
+    return render(request, 'nazionalita.html', {'nazionalita': nazionalita})
+
+def registrazione(request):
+    nazionalita = Nazionalita.objects.all()
+    squadre = Squadra.objects.all()
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        cognome = request.POST.get('cognome')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        data_nascita = request.POST.get('data_nascita')
+        nazionalita_nome = request.POST.get('nazionalita')
+        squadra_nome = request.POST.get('squadra_preferita')
+
+        hashed_password = hashlib.md5(password.encode()).hexdigest()
+
+        # Recupera oggetti collegati
+        nazionalita_obj = Nazionalita.objects.get(nome=nazionalita_nome)
+        squadra_obj = Squadra.objects.get(nome=squadra_nome) if squadra_nome else None
+
+        # Crea e salva l'utente
+        Utente.objects.create(
+            nome=nome,
+            cognome=cognome,
+            email=email,
+            password=password,
+            data_nascita=data_nascita,
+            nazionalita=nazionalita_obj,
+            squadra_preferita=squadra_obj
+        )
+        return render(request, 'benvenuto.html', {'form': None, 'success': True})
+
+    return render(request, 'registrazione.html', {
+        'nazionalita': nazionalita,
+        'squadre': squadre
+    })
+
+
+
+
+def login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        hashed_password = hashlib.md5(password.encode()).hexdigest()
+
+        if authenticated(email, hashed_password):
+            # Salva l'email in sessione se vuoi gestire l'utente loggato
+            request.session['user_email'] = email
+            return redirect('principale')  # Usa il nome della url della pagina principale
+        else:
+            return render(request, 'login.html', {'error_message': "Credenziali non valide, riprova"})
+    else:
+        return render(request, 'login.html', {'error_message': "Metodo non valido"})
