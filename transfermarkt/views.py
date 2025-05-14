@@ -18,7 +18,14 @@ def benvenuto(request):
 
 
 def partite_settimana(request):
-    username = request.session.get('user_email', '')
+    user_email = request.session.get('user_email', '')
+    username = ''
+    if user_email:
+        try:
+            utente = Utente.objects.get(email=user_email)
+            username = utente.nome
+        except Utente.DoesNotExist:
+            pass
     oggi = timezone.now()
     fine_settimana = oggi + timedelta(days=7)
     top_campionati = [
@@ -46,7 +53,7 @@ def login(request):
         # print(email," : ", hashed_password)
 
         if authenticated(email, hashed_password):
-            request.session['utente_email'] = email
+            request.session['user_email'] = email
             return redirect('principale')
         else:
             return render(request, 'login.html', {'error_message': "Credenziali non valide, riprova"})
@@ -88,7 +95,7 @@ def registrazione(request):
             nome=nome,
             cognome=cognome,
             email=email,
-            password=password,
+            password=hashed_password,
             data_nascita=data_nascita,
             nazionalita=nazionalita_obj,
             squadra_preferita=squadra_obj
@@ -99,21 +106,3 @@ def registrazione(request):
         'nazionalita': nazionalita,
         'squadre': squadre
     })
-
-
-
-
-def login(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        hashed_password = hashlib.md5(password.encode()).hexdigest()
-
-        if authenticated(email, hashed_password):
-            # Salva l'email in sessione se vuoi gestire l'utente loggato
-            request.session['user_email'] = email
-            return redirect('principale')  # Usa il nome della url della pagina principale
-        else:
-            return render(request, 'login.html', {'error_message': "Credenziali non valide, riprova"})
-    else:
-        return render(request, 'login.html', {'error_message': "Metodo non valido"})

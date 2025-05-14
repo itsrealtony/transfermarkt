@@ -37,13 +37,33 @@ class Utente(models.Model):
     nazionalita = models.ForeignKey(Nazionalita, on_delete=models.CASCADE, related_name='utenti')
     squadra_preferita = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name='utenti', null=True, blank=True)
 
+
+
+class Giornata(models.Model):
+    numero = models.IntegerField()
+    campionato = models.ForeignKey(Campionato, on_delete=models.CASCADE, related_name='giornate')
+
+    class Meta:
+        unique_together = ('numero', 'campionato')
+
+    def __str__(self):
+        return f"Giornata {self.numero} - {self.campionato.nome}"
+
+
+
+
 class Partita(models.Model):
     id = models.AutoField(primary_key=True)
     squadra_casa = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name='partite_casa')
     squadra_ospite = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name='partite_ospite')
     campionato = models.ForeignKey(Campionato, on_delete=models.CASCADE, related_name='partite')
+    giornata = models.ForeignKey(Giornata, on_delete=models.CASCADE, related_name='partite', null=True, blank=True)
+    risultato = models.CharField(max_length=10, null=True, blank=True)
     data = models.DateTimeField()
     stadio = models.CharField(max_length=100)
     gol_casa = models.IntegerField(null=True, blank=True)
     gol_ospite = models.IntegerField(null=True, blank=True)
+
+
+
 
