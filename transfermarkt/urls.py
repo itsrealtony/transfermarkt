@@ -21,12 +21,14 @@ from .views import registrazione
 from .views import Lista_Nazionalita
 from .views import login
 from .views import benvenuto
+from .views import login_admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', benvenuto, name='benvenuto'),  # Home mostra benvenuto.html
     path('benvenuto/', benvenuto, name='benvenuto'),
     path('login/', login, name='login'),
+    path('login_admin/', views.login_admin, name='login_admin'),
     path('registrazione/', registrazione, name='registrazione'),
     path('nazionalita/', Lista_Nazionalita, name='nazionalita'),
     path('principale/', views.partite_settimana, name='principale'),

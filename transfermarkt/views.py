@@ -4,6 +4,9 @@ from datetime import timedelta
 from .models import Partita, Utente , Squadra , Nazionalita
 from .form import RegistrazioneForm
 from .form import LoginForm
+from .models import Admin
+
+
 
 import hashlib
 
@@ -67,6 +70,27 @@ def registrazione(request):
         'nazionalita': nazionalita,
         'squadre': squadre
     })
+
+def authenticated_admin(email, password):
+    return Admin.objects.filter(email=email, password=password).exists()
+
+def login_admin(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        hashed_password = hashlib.md5(password.encode()).hexdigest()
+
+        if authenticated_admin(email, hashed_password):
+            request.session['admin_email'] = email
+            # Reindirizza dove vuoi dopo il login admin
+            return redirect('principale_admin')
+        else:
+            return render(request, 'login_admin.html', {'error_message': "Credenziali admin non valide, riprova"})
+    else:
+        return render(request, 'login_admin.html')
+
+
+
 def Lista_Nazionalita(request):
     nazionalita = Nazionalita.objects.all()
     print (nazionalita)

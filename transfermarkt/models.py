@@ -13,7 +13,7 @@ class Squadra(models.Model):
     nome = models.CharField(max_length=100, primary_key=True)
     campionato = models.ForeignKey(Campionato, on_delete=models.CASCADE,
                                    related_name='squadre')
-    data_fondazione = models.DateField(null=True)
+    data_fondazione = models.DateField(null=True, blank=True)
     stadio = models.CharField(max_length=100, null=True)
     capacita_stadio = models.IntegerField(null=True)
     citta = models.CharField(max_length=100, null=True)
@@ -27,6 +27,18 @@ class Giocatore(models.Model):
     squadra = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name='giocatori', null=True, blank=True)
     valore_mercato = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     ruolo = models.CharField(max_length=100, null=True)
+    gol_fatti = models.IntegerField(null=True, blank=True)
+    assist = models.IntegerField(null=True, blank=True)
+    presenze = models.IntegerField(null=True, blank=True)
+    cartellini_rossi = models.IntegerField(null=True, blank=True)
+    cartellini_gialli = models.IntegerField(null=True, blank=True)
+    contratto =models.DateField(null=True, blank=True)
+
+class Admin(models.Model):
+    nome = models.CharField(max_length=100)
+    cognome = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100, primary_key=True, unique=True)
+    password = models.CharField(max_length=100)
 
 class Utente(models.Model):
     nome = models.CharField(max_length=100)
