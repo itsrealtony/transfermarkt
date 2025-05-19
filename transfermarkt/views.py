@@ -59,7 +59,7 @@ def login(request):
             request.session['user_email'] = email
             return redirect('principale')
         else:
-            return render(request, 'login.html', {'error_message': "Credenziali non valide, riprova"})
+            return render(request, 'login.html', {'error_message': "Credenziali errate"})
     else:
         return render(request, 'login.html')
 
@@ -79,15 +79,22 @@ def login_admin(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         hashed_password = hashlib.md5(password.encode()).hexdigest()
+        print(f"Email: {email}, Password: {password}, Hash: {hashed_password}")
 
         if authenticated_admin(email, hashed_password):
             request.session['admin_email'] = email
-            # Reindirizza dove vuoi dopo il login admin
             return redirect('principale_admin')
         else:
-            return render(request, 'login_admin.html', {'error_message': "Credenziali admin non valide, riprova"})
+            print("Login fallito")
+            return render(request, 'login_admin.html', {'error_message': "Credenziali errate"})
     else:
         return render(request, 'login_admin.html')
+
+
+def principale_admin(request):
+    if not request.session.get('admin_email'):
+        return redirect('login_admin')
+    return render(request, 'principale_admin.html')
 
 
 
@@ -130,3 +137,41 @@ def registrazione(request):
         'nazionalita': nazionalita,
         'squadre': squadre
     })
+
+
+def aggiungi_partita(request):
+    if request.method == 'POST':
+        squadra_casa = request.POST.get('squadra_casa')
+        squadra_ospite = request.POST.get('squadra_ospite')
+        campionato = request.POST.get('campionato')
+        giornata = request.POST.get('giornata')
+        data = request.POST.get('data')
+        stadio = request.POST.get('stadio')
+        risultato = request.POST.get('risultato')
+        gol_casa = request.POST.get('gol_casa')
+        gol_ospite = request.POST.get('gol_ospite')
+
+        Partita.objects.create(
+            squadra_casa=squadra_casa,
+            squadra_ospite=squadra_ospite,
+            campionato=campionato,
+            giornata=giornata if giornata else None,
+            data=data,
+            stadio=stadio,
+            risultato=risultato,
+            gol_casa=gol_casa if gol_casa else None,
+            gol_ospite=gol_ospite if gol_ospite else None
+        )
+        return redirect('principale_admin')
+    return redirect('principale_admin')
+
+
+def logout(request):
+    # Clear the user session
+    if 'user_email' in request.session:
+        del request.session['user_email']
+    # Also clear admin session if it exists
+    if 'admin_email' in request.session:
+        del request.session['admin_email']
+    # Redirect to welcome page
+    return redirect('benvenuto')

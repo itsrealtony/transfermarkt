@@ -2,12 +2,16 @@ from django.db import models
 
 class Nazionalita(models.Model):
     nome = models.CharField(max_length=100, primary_key=True)
+    def __str__(self):
+        return self.nome
 
 
 class Campionato(models.Model):
     nome = models.CharField(max_length=100, primary_key=True)
     nazionalita = models.ForeignKey(Nazionalita, on_delete=models.CASCADE,
                                     related_name='campionati')
+    def __str__(self):
+        return self.nome
 
 class Squadra(models.Model):
     nome = models.CharField(max_length=100, primary_key=True)
@@ -17,6 +21,8 @@ class Squadra(models.Model):
     stadio = models.CharField(max_length=100, null=True)
     capacita_stadio = models.IntegerField(null=True)
     citta = models.CharField(max_length=100, null=True)
+    def __str__(self):
+        return self.nome
 
 class Giocatore(models.Model):
     id = models.CharField(primary_key=True)
@@ -33,6 +39,7 @@ class Giocatore(models.Model):
     cartellini_rossi = models.IntegerField(null=True, blank=True)
     cartellini_gialli = models.IntegerField(null=True, blank=True)
     contratto =models.DateField(null=True, blank=True)
+
 
 class Admin(models.Model):
     nome = models.CharField(max_length=100)
@@ -52,6 +59,7 @@ class Utente(models.Model):
 
 
 class Giornata(models.Model):
+    id = models.CharField(primary_key=True, max_length=100)
     numero = models.IntegerField()
     campionato = models.ForeignKey(Campionato, on_delete=models.CASCADE, related_name='giornate')
 
