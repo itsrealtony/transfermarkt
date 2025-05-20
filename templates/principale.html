@@ -164,6 +164,34 @@
             <p>Segui le partite dei top 5 campionati europei</p>
         </div>
 
+        <div class="filter-container" style="margin-bottom: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); padding: 20px; text-align: center;">
+            <form method="GET" action="{% url 'principale' %}" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <label for="campionato" style="font-weight: 600; margin-bottom: 5px; color: #0073e6;">Campionato:</label>
+                    <select name="campionato" id="campionato" style="padding: 10px; border-radius: 5px; border: 1px solid #e0e0e0; min-width: 200px;">
+                        <option value="">Tutti i campionati</option>
+                        {% for camp in campionati %}
+                            <option value="{{ camp.nome }}" {% if campionato_selezionato == camp.nome %}selected{% endif %}>{{ camp.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <label for="giornata" style="font-weight: 600; margin-bottom: 5px; color: #0073e6;">Giornata:</label>
+                    <select name="giornata" id="giornata" style="padding: 10px; border-radius: 5px; border: 1px solid #e0e0e0; min-width: 200px;">
+                        <option value="">Tutte le giornate</option>
+                        {% for g in giornate %}
+                            <option value="{{ g.numero }}" {% if giornata_selezionata == g.numero %}selected{% endif %}>{{ g.numero }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="align-self: flex-end; margin-bottom: 1px;">
+                    <button type="submit" style="background-color: #0073e6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                        Applica Filtri
+                    </button>
+                </div>
+            </form>
+        </div>
+
         <div class="matches-container">
             <table>
                 <thead>
@@ -174,6 +202,7 @@
                         <th>Squadra Casa</th>
                         <th>Squadra Ospite</th>
                         <th>Stadio</th>
+                        <th>Risultato</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -185,10 +214,7 @@
                         <td class="team-name">{{ p.squadra_casa.nome }}</td>
                         <td class="team-name">{{ p.squadra_ospite.nome }}</td>
                         <td class="stadium">{{ p.stadio }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="empty-message">Nessuna partita trovata per questa settimana.</td>
+                        <td>{{ p.risultato }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

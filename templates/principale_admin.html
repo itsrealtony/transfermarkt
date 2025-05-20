@@ -65,6 +65,39 @@
         button:hover {
             background: linear-gradient(90deg, #125ea2 60%, #1976d2 100%);
         }
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #b3c6e0;
+            border-radius: 6px;
+            font-size: 1em;
+            background: #f8fbff;
+            transition: border 0.2s;
+        }
+        select:focus {
+            border: 1.5px solid #1976d2;
+            outline: none;
+        }
+        .filter-form {
+            background: #fff;
+            max-width: 420px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(25,118,210,0.10);
+            text-align: center;
+        }
+        .filter-button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: linear-gradient(90deg, #1976d2 60%, #64b5f6 100%);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(25,118,210,0.10);
+        }
     </style>
 </head>
 <body>
@@ -75,19 +108,44 @@
     <div style="text-align: center; margin: 20px 0;">
         <a href="{% url 'logout' %}" style="display: inline-block; padding: 10px 25px; background: linear-gradient(90deg, #1976d2 60%, #64b5f6 100%); color: white; text-decoration: none; border-radius: 6px; font-weight: 600; box-shadow: 0 2px 8px rgba(25,118,210,0.10);">Logout</a>
     </div>
+
+    <!-- Form per selezionare il campionato -->
+    <div class="filter-form">
+        <form method="GET" action="{% url 'principale_admin' %}">
+            <label for="campionato">Seleziona Campionato:</label>
+            <select id="campionato" name="campionato" onchange="this.form.submit()">
+                {% for campionato in campionati %}
+                    <option value="{{ campionato.nome }}" {% if campionato.nome == campionato_selezionato %}selected{% endif %}>{{ campionato.nome }}</option>
+                {% endfor %}
+            </select>
+            <noscript>
+                <button type="submit" class="filter-button">Filtra Squadre</button>
+            </noscript>
+        </form>
+    </div>
+
+    <!-- Form per aggiungere la partita -->
     <form method="post" action="{% url 'aggiungi_partita' %}">
     {% csrf_token %}
+    <!-- Campo nascosto per il campionato -->
+    <input type="hidden" name="campionato" value="{{ campionato_selezionato }}">
+
     <label for="squadra_casa">Squadra Casa:</label>
-    <input type="text" id="squadra_casa" name="squadra_casa" required>
+    <select id="squadra_casa" name="squadra_casa" required>
+        {% for squadra in squadre %}
+            <option value="{{ squadra.nome }}">{{ squadra.nome }}</option>
+        {% endfor %}
+    </select>
 
     <label for="squadra_ospite">Squadra Ospite:</label>
-    <input type="text" id="squadra_ospite" name="squadra_ospite" required>
+    <select id="squadra_ospite" name="squadra_ospite" required>
+        {% for squadra in squadre %}
+            <option value="{{ squadra.nome }}">{{ squadra.nome }}</option>
+        {% endfor %}
+    </select>
 
-    <label for="campionato">Campionato:</label>
-    <input type="text" id="campionato" name="campionato" required>
-
-    <label for="giornata">Giornata:</label>
-    <input type="text" id="giornata" name="giornata">
+    <label for="giornata">Numero Giornata:</label>
+    <input type="number" id="giornata" name="giornata" min="1" placeholder="Inserisci solo il numero della giornata">
 
     <label for="data">Data:</label>
     <input type="date" id="data" name="data" required>
