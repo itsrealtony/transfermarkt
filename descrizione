@@ -1,0 +1,56 @@
+                                Traccia d’Esame – Progetto di Sistema Informativo per Gestione Campionati di Calcio
+
+Il progetto prevede la realizzazione di un sistema informativo completo per la gestione dei campionati di calcio, delle squadre, dei giocatori e delle relative
+statistiche, sostituendo le procedure manuali con un'applicazione web intuitiva e moderna. Il cuore del sistema è un database SQL che ospita tutte le
+informazioni necessarie per gestire efficacemente i dati sportivi e i servizi offerti agli utenti.
+
+Il database contiene un catalogo dettagliato di tutti i campionati, squadre e giocatori, includendo informazioni come nome, nazionalità, ruolo,
+valore di mercato, statistiche individuali e dati contrattuali.
+Per ogni squadra è possibile visualizzare la rosa aggiornata, lo stadio, la città e la partecipazione ai vari campionati.
+Ogni campionato gestisce la propria classifica, aggiornata automaticamente in base ai risultati delle partite.
+
+Gli utenti dell’applicazione sono suddivisi tra amministratori e tifosi.
+Gli amministratori possono gestire i dati di squadre, giocatori, partite e campionati, mentre i tifosi possono consultare le statistiche,
+visualizzare le classifiche, seguire la propria squadra preferita e accedere a un’area dedicata con informazioni dettagliate.
+
+La gestione delle partite rappresenta una funzionalità centrale dell’applicazione, permettendo di registrare i risultati,
+aggiornare le classifiche e tracciare le statistiche di ogni giornata di campionato.
+Il sistema mantiene uno storico completo di tutte le partite giocate, facilitando sia la consultazione che l’analisi dei dati sportivi.
+
+L’applicazione offre anche uno spazio dedicato alle statistiche individuali dei giocatori, come presenze, gol, assist, cartellini e valore di mercato,
+con la possibilità di ordinare e filtrare i dati secondo diversi criteri.
+ Ogni tifoso può accedere a una sezione personalizzata per seguire la propria squadra e i propri giocatori preferiti.
+
+Non manca una sezione dedicata alla gestione degli utenti, con informazioni sui ruoli e le preferenze di ciascun membro,
+inclusa la possibilità di selezionare la squadra del cuore.
+Questo aspetto risulta particolarmente utile per offrire un’esperienza personalizzata e coinvolgente.
+
+
+                                                            Obiettivi del Progetto
+
+
+                                                        Analisi e progettazione concettuale
+
+A partire dalla descrizione del contesto, è stato analizzato il dominio calcistico e costruito un modello entità-relazione completo,
+ includendo le relazioni tra campionati, squadre, giocatori, partite e classifiche.
+  Sono state gestite le relazioni di appartenenza e partecipazione, motivando le scelte effettuate per garantire coerenza e integrità dei dati.
+
+
+                                                            Progettazione logica
+
+Dal modello E-R è stato derivato il modello logico relazionale,
+includendo una descrizione dei vincoli rilevanti (unicità, integrità referenziale, ordinamento delle classifiche)
+e giustificando eventuali semplificazioni o adattamenti per l’implementazione.
+
+
+                                                    Implementazione del sistema informativo
+
+Utilizzando Django, è stata realizzata un’applicazione che permette la gestione dei dati modellati e l’accesso alle seguenti funzionalità principali:
+
+
+Visualizzazione delle classifiche dei campionati, con dettagli su posizione, punti, gol fatti/subiti, differenza reti e risultati delle partite.
+Registrazione e autenticazione degli utenti (amministratori e tifosi).
+Gestione delle partite e aggiornamento automatico delle classifiche.
+Visualizzazione delle statistiche dettagliate dei giocatori e delle squadre.
+Area tifoso personalizzata, con possibilità di seguire la propria squadra preferita.
+L’applicazione è progettata per essere facilmente estendibile e garantire un’esperienza utente completa e coinvolgente per tutti gli appassionati di calcio.
