@@ -186,12 +186,14 @@
             margin-bottom: 15px;
             color: #0073e6;
             font-size: 20px;
+            text-align: center;
         }
 
         .rankings-container h4 {
             margin-bottom: 10px;
             color: #333;
             font-size: 16px;
+            text-align: center;
         }
 
         .rankings-container p.select-message {
@@ -199,13 +201,17 @@
             font-style: italic;
             color: #666;
             font-size: 14px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h2>Benvenuto{% if username %}, {{ username }}{% endif %}</h2>
-        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        <div style="margin-top: 10px;">
+            <a href="{% url 'area_tifoso' %}" class="logout-btn" style="background-color: #ff6b00; color: white; margin-right: 10px;">Area Tifoso</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </div>
     </div>
 
     <div class="container">

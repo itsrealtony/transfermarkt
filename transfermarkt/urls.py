@@ -25,6 +25,7 @@ from .views import login_admin
 from .views import principale_admin
 from .views import aggiungi_partita
 from .views import logout
+from .views import area_tifoso
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,4 +39,5 @@ urlpatterns = [
     path('principale_admin/', principale_admin, name='principale_admin'),
     path('logout/', logout, name='logout'),
     path('aggiungi_partita/', aggiungi_partita, name='aggiungi_partita'),
+    path('area_tifoso/', area_tifoso, name='area_tifoso'),
 ]

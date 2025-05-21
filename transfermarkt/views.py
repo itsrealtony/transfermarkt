@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from datetime import timedelta
-from .models import Partita, Utente, Squadra, Nazionalita, Classifica
+from .models import Partita, Utente, Squadra, Nazionalita, Classifica, Giocatore
 from .form import RegistrazioneForm
 from .form import LoginForm
 from .models import Admin
@@ -260,6 +260,73 @@ def aggiungi_partita(request):
 
     return redirect('principale_admin')
 
+
+def area_tifoso(request):
+    user_email = request.session.get('user_email', '')
+    username = ''
+    squadra_preferita = None
+    classifica = []
+    giocatori = []
+
+    # prendi i parametri di ordinamento dalla richiesta
+    sort_by = request.GET.get('sort_by', '')
+    sort_order = request.GET.get('sort_order', 'desc')
+
+
+    if not sort_by:
+        sort_by = 'valore_mercato'
+
+    if not user_email:
+        return redirect('login')
+
+    try:
+        utente = Utente.objects.get(email=user_email)
+        username = utente.nome
+        squadra_preferita = utente.squadra_preferita
+
+        if squadra_preferita:
+            # prendi il campionato della squadra preferita
+            campionato = squadra_preferita.campionato
+
+            # prendi la classifica del campionato
+            classifica = Classifica.objects.filter(campionato=campionato).order_by('posizione')
+
+            # prendi giocatori dalla squadra
+            giocatori = Giocatore.objects.filter(squadra=squadra_preferita)
+
+
+
+            # organizza i giocatori in base al parametro di ordinamento
+            if sort_by == 'valore_mercato':
+                # organizza in base al valore di mercato
+                giocatori = sorted(giocatori, key=lambda g: g.valore_mercato or 0, reverse=(sort_order == 'desc'))
+            elif sort_by == 'presenze':
+                # organizza in base alle presenze
+                giocatori = sorted(giocatori, key=lambda g: g.presenze or 0, reverse=(sort_order == 'desc'))
+            elif sort_by == 'gol_fatti':
+                # organizza in base ai gol fatti
+                giocatori = sorted(giocatori, key=lambda g: g.gol_fatti or 0, reverse=(sort_order == 'desc'))
+            elif sort_by == 'assist':
+                # organizza in base agli assist
+                giocatori = sorted(giocatori, key=lambda g: g.assist or 0, reverse=(sort_order == 'desc'))
+            elif sort_by == 'cartellini_gialli':
+                # organizza in base ai cartellini gialli
+                giocatori = sorted(giocatori, key=lambda g: g.cartellini_gialli or 0, reverse=(sort_order == 'desc'))
+            elif sort_by == 'cartellini_rossi':
+                # organizza in base ai cartellini rossi
+                giocatori = sorted(giocatori, key=lambda g: g.cartellini_rossi or 0, reverse=(sort_order == 'desc'))
+
+    except Utente.DoesNotExist:
+        return redirect('login')
+
+    return render(request, 'area_tifoso.html', {
+        'username': username,
+        'squadra_preferita': squadra_preferita,
+        'classifica': classifica,
+        'giocatori': giocatori,
+        'sort_by': sort_by,
+        'sort_order': sort_order
+    })
 
 def logout(request):
 
