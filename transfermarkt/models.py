@@ -84,6 +84,29 @@ class Partita(models.Model):
     gol_casa = models.IntegerField(null=True, blank=True)
     gol_ospite = models.IntegerField(null=True, blank=True)
 
+class Classifica(models.Model):
+    campionato = models.ForeignKey(Campionato, on_delete=models.CASCADE, related_name='classifiche')
+    squadra = models.ForeignKey(Squadra, on_delete=models.CASCADE, related_name='classifiche')
+    posizione = models.IntegerField()
+    punti = models.IntegerField(default=0)
+    gol_fatti = models.IntegerField(default=0)
+    gol_subiti = models.IntegerField(default=0)
+    differenza_reti = models.IntegerField(default=0)
+    partite_giocate = models.IntegerField(default=0)
+    partite_vinte = models.IntegerField(default=0)
+    partite_pareggiate = models.IntegerField(default=0)
+    partite_perse = models.IntegerField(default=0)
 
+    class Meta:
+        unique_together = ('campionato', 'squadra')
+        ordering = ['posizione']
+
+
+        class Meta:
+            unique_together = ('campionato', 'squadra')
+            ordering = ['posizione']
+
+    class Meta:
+        unique_together = ('squadra', 'campionato')
 
 

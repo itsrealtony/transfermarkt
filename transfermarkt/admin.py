@@ -1,6 +1,6 @@
 # transfermarkt/admin.py
 from django.contrib import admin
-from .models import Nazionalita, Campionato, Squadra, Giocatore, Utente, Giornata, Partita, Admin
+from .models import Nazionalita, Campionato, Squadra, Giocatore, Utente, Giornata, Partita,Classifica, Admin
 
 admin.site.register(Nazionalita)
 admin.site.register(Campionato)
@@ -10,3 +10,4 @@ admin.site.register(Utente)
 admin.site.register(Giornata)
 admin.site.register(Partita)
 admin.site.register(Admin)
+admin.site.register(Classifica)

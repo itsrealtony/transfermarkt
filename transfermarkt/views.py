@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from datetime import timedelta
-from .models import Partita, Utente , Squadra , Nazionalita
+from .models import Partita, Utente, Squadra, Nazionalita, Classifica
 from .form import RegistrazioneForm
 from .form import LoginForm
 from .models import Admin
@@ -78,13 +78,21 @@ def partite_settimana(request):
 
     partite = partite_query.order_by('data')[:10]
 
+    # Query per la classifica
+    if campionato_selezionato:
+        classifica = Classifica.objects.filter(campionato__nome=campionato_selezionato).order_by('posizione')
+    else:
+        # Se nessun campionato è selezionato, mostra la classifica del primo campionato disponibile
+        classifica = Classifica.objects.filter(campionato__nome__in=top_campionati).order_by('campionato__nome', 'posizione')
+
     return render(request, 'principale.html', {
         'partite': partite, 
         'username': username,
         'campionati': campionati,
         'giornate': giornate,
         'campionato_selezionato': campionato_selezionato,
-        'giornata_selezionata': giornata_selezionata
+        'giornata_selezionata': giornata_selezionata,
+        'classifica': classifica
     })
 
 
@@ -181,11 +189,11 @@ def registrazione(request):
 
         hashed_password = hashlib.md5(password.encode()).hexdigest()
 
-        # Recupera oggetti collegati
+
         nazionalita_obj = Nazionalita.objects.get(nome=nazionalita_nome)
         squadra_obj = Squadra.objects.get(nome=squadra_nome) if squadra_nome else None
 
-        # Crea e salva l'utente
+
         Utente.objects.create(
             nome=nome,
             cognome=cognome,
@@ -205,7 +213,7 @@ def registrazione(request):
 
 def aggiungi_partita(request):
     if request.method == 'POST':
-        # Get form data
+
         squadra_casa_nome = request.POST.get('squadra_casa')
         squadra_ospite_nome = request.POST.get('squadra_ospite')
         campionato_nome = request.POST.get('campionato')
@@ -216,23 +224,23 @@ def aggiungi_partita(request):
         gol_casa = request.POST.get('gol_casa')
         gol_ospite = request.POST.get('gol_ospite')
 
-        # Get the objects from the database
+
         try:
             squadra_casa = Squadra.objects.get(nome=squadra_casa_nome)
             squadra_ospite = Squadra.objects.get(nome=squadra_ospite_nome)
             campionato = Campionato.objects.get(nome=campionato_nome)
 
-            # Find the corresponding Giornata object if giornata_numero is provided
+
             giornata = None
             if giornata_numero:
                 try:
-                    # Try to find the Giornata with the given number and campionato
+
                     giornata = Giornata.objects.get(numero=giornata_numero, campionato=campionato)
                 except Giornata.DoesNotExist:
-                    # If it doesn't exist, we'll leave giornata as None
+
                     pass
 
-            # Create the Partita object
+
             Partita.objects.create(
                 squadra_casa=squadra_casa,
                 squadra_ospite=squadra_ospite,
@@ -247,7 +255,7 @@ def aggiungi_partita(request):
 
             return redirect('principale_admin')
         except (Squadra.DoesNotExist, Campionato.DoesNotExist) as e:
-            # Handle errors - for now just redirect back
+
             return redirect('principale_admin')
 
     return redirect('principale_admin')
