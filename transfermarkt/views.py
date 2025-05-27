@@ -103,7 +103,7 @@ def login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        hashed_password = hashlib.md5(password.encode()).hexdigest()
+        hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
         # print(email," : ", hashed_password)
 
         if authenticated(email, hashed_password):
@@ -129,7 +129,7 @@ def login_admin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        hashed_password = hashlib.md5(password.encode()).hexdigest()
+        hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
         print(f"Email: {email}, Password: {password}, Hash: {hashed_password}")
 
         if authenticated_admin(email, hashed_password):
@@ -187,7 +187,7 @@ def registrazione(request):
         nazionalita_nome = request.POST.get('nazionalita')
         squadra_nome = request.POST.get('squadra_preferita')
 
-        hashed_password = hashlib.md5(password.encode()).hexdigest()
+        hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
 
         nazionalita_obj = Nazionalita.objects.get(nome=nazionalita_nome)
