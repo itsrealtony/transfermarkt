@@ -48,7 +48,3 @@ Admin:
 ```
 mail: admin@gmail.com
 password: admin
-
-
-
-
