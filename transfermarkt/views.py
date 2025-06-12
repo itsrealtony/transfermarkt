@@ -76,7 +76,7 @@ def partite_settimana(request):
         partite_query = partite_query.filter(data__range=(oggi, fine_settimana))
 
 
-    partite = partite_query.order_by('data')[:10]
+    partite = partite_query.order_by('data')
 
     # Query per la classifica
     if campionato_selezionato:

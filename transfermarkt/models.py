@@ -100,13 +100,3 @@ class Classifica(models.Model):
     class Meta:
         unique_together = ('campionato', 'squadra')
         ordering = ['posizione']
-
-
-        class Meta:
-            unique_together = ('campionato', 'squadra')
-            ordering = ['posizione']
-
-    class Meta:
-        unique_together = ('squadra', 'campionato')
-
-
