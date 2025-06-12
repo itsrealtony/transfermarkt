@@ -47,25 +47,20 @@ cd transfermarkt
 python -m venv venv
 venv\Scripts\activate
 
-3. Installa le dipendenze
-
-
-pip install -r requirements.txt
-
-4. Applica le migrazioni al database
+3. Applica le migrazioni al database
 
 
 python manage.py migrate
 
-5. Avvia il server di sviluppo
+4. Avvia il server di sviluppo
 
 
 python manage.py runserver
 
 
-7. Accedi all'applicazione 
+5. Accedi all'applicazione 
 
-8. Apri il browser e vai su http://127.0.0.1:8000/
+6. Apri il browser e vai su http://127.0.0.1:8000/
 
-9. Creare un utente tramite registrazione o accedere con un account esistente.
+7. Creare un utente tramite registrazione o accedere con un account esistente.
 
